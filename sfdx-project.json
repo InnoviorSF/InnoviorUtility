@@ -1,12 +1,20 @@
 {
-  "packageDirectories": [
-    {
-      "path": "force-app",
-      "default": true
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "InnoviorUtility",
+            "versionName": "ver 1.0",
+            "versionNumber": "1.0.0.NEXT"
+        }
+    ],
+    "name": "InnoviorUtility",
+    "namespace": "",
+    "sfdcLoginUrl": "https://innov.my.salesforce.com/",
+    "sourceApiVersion": "55.0",
+    "packageAliases": {
+        "InnoviorUtility": "0Ho5j000000blybCAA",
+        "InnoviorUtility@1.0.0-1": "04t5j000000IKpCAAW",
+        "InnoviorUtility@1.0.0-2": "04t5j000000IKpHAAW"
     }
-  ],
-  "name": "InnoviorUtility",
-  "namespace": "",
-  "sfdcLoginUrl": "https://innov.my.salesforce.com/",
-  "sourceApiVersion": "55.0"
 }
