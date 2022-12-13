@@ -1,0 +1,16 @@
+.input {
+    width: 100%;
+}
+
+.input:focus {
+    outline-width: 0;
+}
+
+.pillContainer {  
+    padding: .125rem;
+    min-height: 34px;
+}
+
+.inputPadding .slds-form-element__control.slds-grow{
+    padding-left: 0px !important;
+}

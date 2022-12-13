@@ -1,0 +1,40 @@
+<!--
+ - Created by sagrawal on 10/06/2022
+ -->
+
+<!-- Email Template Select Component -->
+<template>
+    <template if:true={showModal}>
+        <div class="demo-only">
+            <section class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close"
+                                            alternative-text="Close"
+                                            variant="bare-inverse"
+                                            class="slds-modal__close"
+                                            size="large"
+                                            onclick={closeModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">Email Template</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium slds-is-relative" style="height:30rem">
+                        <div class="slds-p-around_xx-small">
+                            <lightning-combobox  name="progress"
+                                                variant="label-hidden"
+                                                value={selectedEmailTemplate}
+                                                placeholder={templateType}
+                                                options={templateOptions}
+                                                onchange={handleTemplateSelect}></lightning-combobox>
+                        </div>
+                    </div>
+                    <!--
+                    <footer class="slds-modal__footer">&nbsp;&nbsp;
+                        <lightning-button label="Select" variant="brand" onclick={handleTemplateSelect} disabled={handleWhenNoToEmailAdded}></lightning-button>
+                    </footer>
+                    -->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

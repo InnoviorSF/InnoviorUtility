@@ -1,0 +1,73 @@
+<!--
+ - Created by sagrawal on 10/09/2022.
+ -->
+
+<template>
+    <template if:true={showModal}>
+        <lightning-spinner if:true={isLoaded} alternative-text="Loading..."> </lightning-spinner>
+        <div class="demo-only">
+            <section class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close"
+                                            alternative-text="Close"
+                                            variant="bare-inverse"
+                                            class="slds-modal__close"
+                                            size="large"
+                                            onclick={closeModal}></lightning-button-icon>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">Preview Email</h2>
+                    </header>
+                    <div class="slds-modal__content slds-is-relative">
+                        <lightning-layout multiple-rows="true" class="slds-var-p-around_medium">
+                            <lightning-layout-item size="2" class="slds-var-p-around_xx-small">From</lightning-layout-item>
+                            <lightning-layout-item size="10" class="slds-var-p-around_xx-small">{fromAddress}</lightning-layout-item>
+
+                            <lightning-layout-item size="2" class="slds-var-p-around_xx-small">To</lightning-layout-item>
+                            <lightning-layout-item size="10" class="slds-var-p-around_xx-small">{toAddress}</lightning-layout-item>
+                            
+                            <template if:true={ccAddresses.length}>
+                                <lightning-layout-item size="2" class="slds-var-p-around_xx-small">Cc</lightning-layout-item>
+                                <lightning-layout-item size="10" class="slds-var-p-around_xx-small">{ccAddress}</lightning-layout-item>
+                            </template>
+
+                            <template if:true={bccAddresses.length}>
+                                <lightning-layout-item size="2" class="slds-var-p-around_xx-small">Bcc</lightning-layout-item>
+                                <lightning-layout-item size="10" class="slds-var-p-around_xx-small">{bccAddress}</lightning-layout-item>
+                            </template>
+
+                            <lightning-layout-item size="2" class="slds-var-p-around_xx-small">Subject</lightning-layout-item>
+                            <lightning-layout-item size="10" class="slds-var-p-around_xx-small">
+                                <lightning-formatted-text value={subject}></lightning-formatted-text>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="2" class="slds-var-p-around_xx-small">Body</lightning-layout-item>
+                            <lightning-layout-item size="10" class="slds-var-p-around_xx-small">
+                                <lightning-formatted-rich-text value={body}></lightning-formatted-rich-text>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <div if:true={uploadedFileList.length} class="slds-var-p-around_medium">
+                            <lightning-layout vertical-align="center">
+                                <lightning-layout-item size="2">
+                                    <span>Attached Files :</span>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="10">
+                                    <template for:each={uploadedFileList} for:item="file">
+        
+                                        <span class="slds-pill" key={file.filename}>
+                                            <span class="slds-pill__icon_container">
+                                                <lightning-icon icon-name="utility:file" variant="circle"></lightning-icon>
+                                            </span>
+                                            <span class="slds-pill__label">{file.filename}</span>
+                                        </span>
+                                    </template>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

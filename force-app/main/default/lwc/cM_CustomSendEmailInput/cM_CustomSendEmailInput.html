@@ -1,0 +1,62 @@
+<!-- <template>
+
+        <template class="slds-list_horizontal" for:each={selectedValues} for:item="selectedValue" for:index="index">
+            <lightning-pill
+                key={selectedValue}
+                label={selectedValue}
+                onremove={handleRemove}
+                data-index={index}
+            ></lightning-pill>
+        </template>
+         sldsValidatorIgnoreNextLine
+        <div class="slds-form-element__control">
+            <lightning-input
+                type="text"
+                id="to"
+                onkeypress={handleKeyPress}
+                onblur={handleBlur}
+                class="slds-input"
+                message-when-pattern-mismatch="Please enter a valid email address."> </lightning-input>
+        </div>
+
+</template> -->
+
+<template>
+    <div>
+        <div class="pillContainer" onclick={showInputBox}>
+            <lightning-layout>
+                <lightning-layout-item size="12">
+                    <lightning-layout multiple-rows="true">
+                        <template for:each={selectedValues} for:item="selectedValue" for:index="index">
+                            <lightning-layout-item key={selectedValue}>
+                                <lightning-pill key={selectedValue}
+                                                label={selectedValue}
+                                                onremove={handleRemove}
+                                                data-index={index}>
+                                    <lightning-icon icon-name='standard:email' variant="circle"></lightning-icon>
+                                </lightning-pill>
+                            </lightning-layout-item>
+                        </template>
+
+                        <!-- sldsValidatorIgnoreNextLine -->
+                        <lightning-layout-item flexibility="auto">
+                            <template if:true={showInput}>
+                                <lightning-input type="email"
+                                                 class="slds-m-left_xx-small slds-m-right_xx-small inputPadding"
+                                                 value={newEmail}
+                                                 label=""
+                                                 variant="label-hidden"
+                                                 pattern="^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$"
+                                                 message-when-pattern-mismatch="Please enter a valid email address."
+                                                 onchange={updateNewEmail}
+                                                 onblur={addNewEmailToList}
+                                                 onkeypress={handleKeyPress}>
+                                </lightning-input>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </div>
+</template>

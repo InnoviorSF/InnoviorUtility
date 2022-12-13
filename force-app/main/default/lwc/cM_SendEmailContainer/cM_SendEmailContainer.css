@@ -1,0 +1,8 @@
+
+.slds-icon-text-default {
+    fill: white !important;
+}
+
+:host {
+    --sds-c-textarea-sizing-min-height: 20rem;
+}

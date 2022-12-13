@@ -1,0 +1,265 @@
+<template>
+        <div class="slds-theme_default slds-is-relative">
+            <div class="slds-var-p-around_medium">
+                <lightning-layout vertical-align="center">
+                    <c-c-m-_-custom-email-contacts 
+                        class="to-contacts" open={toContactSelectModal} onclose={contactsCloseHandler} addresses ={toAddress} contactmap={contactDataMap} type="to">
+                    </c-c-m-_-custom-email-contacts>
+                    <c-c-m-_-custom-email-contacts 
+                        class="cc-contacts" open={ccContactSelectModal} onclose={contactsCloseHandler} addresses={ccAddress} contactmap={contactDataMap} type="cc">
+                    </c-c-m-_-custom-email-contacts>
+                    <c-c-m-_-custom-email-contacts 
+                        class="bcc-contacts" open={bccContactSelectModal} onclose={contactsCloseHandler} addresses={bccAddress} contactmap={contactDataMap} type="bcc">
+                    </c-c-m-_-custom-email-contacts>
+                </lightning-layout>
+                <lightning-layout vertical-align="center">
+                    <!-- Error Banner -->
+                    <div if:true={noEmailError} class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+                            title="Description of icon when needed"
+                        >
+                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#error"></use>
+                            </svg>
+                        </span>
+                        <h2>
+                            Please add a recepient
+                        </h2>
+                        <div class="slds-notify__close">
+                            <button
+                                class="slds-button slds-button_icon slds-button_icon-small slds-button_icon-inverse"
+                                title="Close"
+                            >
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div if:true={invalidEmails} class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+                            title="Description of icon when needed"
+                        >
+                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#error"></use>
+                            </svg>
+                        </span>
+                        <h2>
+                            Some of the emails added are invalid
+                        </h2>
+                        <div class="slds-notify__close">
+                            <button
+                                class="slds-button slds-button_icon slds-button_icon-small slds-button_icon-inverse"
+                                title="Close"
+                            >
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </div>
+                    </div>
+                </lightning-layout>
+
+                        <lightning-spinner if:true={isLoaded} alternative-text="Loading..."> </lightning-spinner>
+                        <!-- FROM-->
+                        <lightning-layout vertical-align="center">
+                            <lightning-layout-item size="1">
+                                <div class="slds-form-element__label">From</div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="11">
+                                <div class="slds-combobox_container slds-var-p-around_xx-small">
+                                    <select class="slds-select" onchange={handleFromEmailChange}>
+                                    <!-- HERE Check for default value -->
+                                    <template if:true={hasDefaultFromAddress}> 
+                                        <option value={hasDefaultFromAddress.value}>
+                                            {hasDefaultFromAddress.key}
+                                        </option>
+                                    </template>
+                                    <template if:false={hasDefaultFromAddress}> 
+                                        <option value=" ">
+                                            {empty}
+                                        </option>
+                                    </template>
+                                    <template for:each={fromAddressses} for:item="val">
+                                        <option key={val.key} value={val.value}>
+                                            {val.key}
+                                        </option>
+                                    </template>
+                                    </select>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        
+                        <!--To-->
+                        <lightning-layout vertical-align="center">
+                            <lightning-layout-item size="1">
+                            <label class="slds-form-element__label">To</label>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="11" class="slds-var-p-around_xx-small">
+                                <div style="border: 1px solid #dddbda; border-radius: .25rem;" >
+                                    <lightning-layout>
+                                        <lightning-layout-item size="11">
+                                            <c-c-m-_-custom-send-email-input class="to-input" onselection={handleToAddressChange}></c-c-m-_-custom-send-email-input>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="1" class="slds-var-p-right_small"> 
+                                            <div class="slds-text-align_right">
+                                            <lightning-button-group class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default slds-align_absolute-center">
+                                                
+                                                <lightning-button-icon icon-name="utility:adduser" 
+                                                                        variant="bare" 
+                                                                        title="Add Contact" 
+                                                                        onclick={openToContactModal}></lightning-button-icon>
+                                                <a onclick={handleShowCc} class="slds-var-p-left_xx-small">Cc</a>
+                                                <a class="slds-var-p-left_xx-small" onclick={handleShowBcc}>Bcc</a>
+                                                
+                                            </lightning-button-group>
+                                        </div>
+                                            
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </lightning-layout-item>        
+                        </lightning-layout>       
+
+                        <!--Cc-->
+                        <lightning-layout vertical-align="center" if:true={showCC}>
+                            <lightning-layout-item size="1">
+                                <div class="slds-form-element__label">Cc</div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="11" class="slds-var-p-around_xx-small">
+                                <div style="border: 1px solid #dddbda; border-radius: .25rem;" >
+                                    <lightning-layout vertical-align="center">
+                                        <lightning-layout-item size="11">
+                                            <c-c-m-_-custom-send-email-input class="cc-input" onselection={handleCcAddressChange}></c-c-m-_-custom-send-email-input>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="1" class="slds-var-p-right_small"> 
+                                            <div class="slds-text-align_right">
+                                                <lightning-button-icon icon-name="utility:adduser" 
+                                                                        variant="bare" 
+                                                                        title="Add Contact CC" 
+                                                                        onclick={openCcContactModal}></lightning-button-icon>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </lightning-layout-item> 
+                        </lightning-layout>
+
+                        <!--Bcc-->
+                        <lightning-layout vertical-align="center" if:true={showBCC}>
+                            <lightning-layout-item size="1">
+                                <div class="slds-form-element__label">Bcc</div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="11" class="slds-var-p-around_xx-small">
+                                <div style="border: 1px solid #dddbda; border-radius: .25rem;" >
+                                    <lightning-layout vertical-align="center">
+                                        <lightning-layout-item size="11">
+                                            <c-c-m-_-custom-send-email-input class="bcc-input" onselection={handleBccAddressChange}></c-c-m-_-custom-send-email-input>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="1" class="slds-var-p-right_small"> 
+                                            <div class="slds-text-align_right">
+                                                <lightning-button-icon icon-name="utility:adduser" 
+                                                                        variant="bare" 
+                                                                        title="Add Contact BCC" 
+                                                                        onclick={openBccContactModal}></lightning-button-icon>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- Subject -->
+                        <lightning-layout vertical-align="center">
+                            <lightning-layout-item size="1">
+                                <div class="slds-form-element__label">Subject</div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="11">
+                                <div class="slds-p-around_xx-small">
+                                    <lightning-input
+                                        type="text"
+                                        name="subject"
+                                        id="subject"
+                                        value={subject}
+                                        placeholder="Email Subject"
+                                        onchange={handleSubjectChange}
+                                        variant="label-hidden"
+                                    ></lightning-input>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <!-- Body -->
+                        <div class="slds-p-around_xx-small">
+                            <lightning-input-rich-text value={body} onchange={handleBodyChange}
+                                    formats="font, bold, italic, underline, strike,
+                                            list, indent, align, link, image, clean,
+                                            code, code-block, color, background, mention"
+
+                            ></lightning-input-rich-text>
+                        </div>
+
+                        <div class="slds-p-around_xx-small">
+                            <lightning-button-group>
+                                <lightning-button-icon icon-name="utility:link" 
+                                                        title="Select Attachment" 
+                                                        onclick={handleSelectAttachment}></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:text_template" 
+                                                        title="Insert Email Template" 
+                                                        onclick={handleInsertEmailTemplate}></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:preview" 
+                                                        title="Preview Email" 
+                                                        onclick={handleEmailPreview}></lightning-button-icon>
+                            </lightning-button-group>
+                            <div if:true={uploadedFileList.length}>
+                                <lightning-layout vertical-align="center">
+                                    <lightning-layout-item size="2">
+                                        <span>Attached Files :</span>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="10">
+                                        <template for:each={uploadedFileList} for:item="file">
+                                            <span class="slds-pill slds-m-left_xxx-small" key={file.id}>
+                                                <span class="slds-pill__icon_container">
+                                                    <lightning-icon icon-name="utility:file" variant="circle"></lightning-icon>
+                                                </span>
+                                                <span class="slds-pill__label">
+                                                    <lightning-button variant="base" data-id={file.id}
+                                                    label={file.filename} value={file.id} onclick={navigateToFile}>
+                                                </lightning-button>
+                                                </span>
+                                            </span>
+                                        </template>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </div>
+                    </div>
+
+                    <c-c-m-_-email-template-select-component template-type="Email Templates"
+                    template-options={templateOptions}
+                    onselectedtemplate={setEmailTemplate}></c-c-m-_-email-template-select-component>
+
+                    <c-c-m-_-email-attachment-component 
+                    onattachfile={handleAttachment} 
+                    related-files-map={relatedFilesDataMap} 
+                    record-id={recordId}></c-c-m-_-email-attachment-component>
+
+                    <c-c-m-_-email-preview-component to-addresses={toAddress} 
+                    cc-addresses={ccAddress} 
+                    bcc-addresses={bccAddress} 
+                    subject={subject} 
+                    body={body}></c-c-m-_-email-preview-component>
+
+                    <footer class="slds-modal__footer">&nbsp;&nbsp;
+                        <lightning-button label="Send" variant="brand" onclick={handleSendEmail} disabled={handleWhenNoToEmailAdded}></lightning-button>
+                    </footer>
+        </div>
+</template>
